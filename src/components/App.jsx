@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Searchbar } from './Searchbar';
+import { ImageGallery } from './ImageGallery';
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 
 export class App extends Component {
@@ -33,24 +35,12 @@ export class App extends Component {
   };
 
   render() {
-    const { articles } = this.state;
+    // const { articles } = this.state;
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
-
-          <input
-            name="input"
-            className="input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-          />
-        </form>
-        <ul>
+      <>
+        <Searchbar handleSubmit={this.handleSubmit} />
+        <ImageGallery articles={this.state.articles} />
+        {/* <ul className="gallery">
           {articles.length > 0 &&
             articles.map(({ id, pageURL, tags }) => (
               <li key={id}>
@@ -59,8 +49,8 @@ export class App extends Component {
                 </a>
               </li>
             ))}
-        </ul>
-      </header>
+        </ul> */}
+      </>
     );
   }
 }
