@@ -35,21 +35,10 @@ export class App extends Component {
   };
 
   render() {
-    // const { articles } = this.state;
     return (
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
         <ImageGallery articles={this.state.articles} />
-        {/* <ul className="gallery">
-          {articles.length > 0 &&
-            articles.map(({ id, pageURL, tags }) => (
-              <li key={id}>
-                <a href={pageURL} target="_blank" rel="noreferrer noopener">
-                  {tags}
-                </a>
-              </li>
-            ))}
-        </ul> */}
       </>
     );
   }
