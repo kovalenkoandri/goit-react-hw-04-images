@@ -7,7 +7,8 @@ export class App extends Component {
     articles: [],
     input: '',
   };
-  async componentDidMount() {
+
+  async componentDidUpdate(prevProps, prevState) {
     const response = await axios.get(`?q=${this.state.input}`, {
       params: {
         key: '29101880-694af7e9974b3c9bb9fbf3052',
@@ -15,21 +16,22 @@ export class App extends Component {
         orientation: 'horizontal',
         safesearch: true,
         per_page: 3,
-        // page: this.page,
+        page: 1,
       },
     });
-    this.setState({ articles: response.data.hits });
+    prevState.input !== this.state.input &&
+      this.setState({ articles: response.data.hits });
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    this.setState({
-      input: event.currentTarget.elements.input.value,
-    });
-    console.log(this.state.input);
-    console.log(event.currentTarget.elements.input.value);
+    this.state.input !== event.currentTarget.elements.input.value &&
+      this.setState({
+        input: event.currentTarget.elements.input.value,
+      });
     event.currentTarget.elements.input.value = '';
   };
+
   render() {
     const { articles } = this.state;
     return (
