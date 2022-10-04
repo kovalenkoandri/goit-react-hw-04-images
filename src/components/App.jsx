@@ -4,7 +4,6 @@ import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
 import { Button } from './Button';
 axios.defaults.baseURL = 'https://pixabay.com/api/';
-
 export class App extends Component {
   state = {
     articles: [],

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { ImageGalleryItem } from './ImageGalleryItem';
+import { ImageGalleryItem } from 'components/ImageGalleryItem';
+import css from './ImageGallery.module.css';
 export class ImageGallery extends Component {
   state = {
     articles: [],
@@ -11,7 +12,7 @@ export class ImageGallery extends Component {
   }
   render() {
     return (
-      <ul className="gallery">
+      <ul className={css.ImageGallery}>
         <ImageGalleryItem articles={this.state.articles} />
       </ul>
     );

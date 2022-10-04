@@ -1,5 +1,6 @@
+import css from './Searchbar.module.css';
 export const Searchbar = ({ handleSubmit }) => (
-  <header className="searchbar">
+  <header className={css.Searchbar}>
     <form className="form" onSubmit={handleSubmit}>
       <button type="submit" className="button">
         <span className="button-label">Search</span>

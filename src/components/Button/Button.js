@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
+import css from './Button.module.css';
 
 export const Button = ({ httpRequest }) => {
   return (
-    <button type="button" onClick={httpRequest}>
+    <button className={css.Button} type="button" onClick={httpRequest}>
       load more
     </button>
   );
