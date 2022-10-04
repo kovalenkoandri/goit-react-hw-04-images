@@ -1,9 +1,12 @@
+import PropTypes from 'prop-types';
 
-
-export const Button = ({ componentDidUpdate, articles }) => {
+export const Button = ({ httpRequest }) => {
   return (
-    <button type="button" onClick={componentDidUpdate}>
-      Increment by
+    <button type="button" onClick={httpRequest}>
+      load more
     </button>
   );
+};
+Button.propTypes = {
+  httpRequest: PropTypes.func.isRequired,
 };
