@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
+// import { Button } from './Button';
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 
 export class App extends Component {
   state = {
     articles: [],
     input: '',
+    page: 1,
   };
-
-  async componentDidUpdate(prevProps, prevState) {
+  httpRequest = async () => {
     try {
+      this.setState(prevState => ({ page: prevState.page + 1 }));
       const response = await axios.get(`?q=${this.state.input}`, {
         params: {
           key: '29101880-694af7e9974b3c9bb9fbf3052',
@@ -19,14 +21,19 @@ export class App extends Component {
           orientation: 'horizontal',
           safesearch: true,
           per_page: 3,
-          page: 1,
+          page: this.state.page,
         },
       });
-      prevState.input !== this.state.input &&
-        this.setState({ articles: response.data.hits });
+      // prevState.input !== this.state.input &&
+      this.setState({ articles: response.data.hits });
     } catch (error) {
       console.log(error);
     }
+  };
+  async componentDidUpdate(prevProps, prevState) {
+    
+    prevState.input !== this.state.input &&
+   await this.httpRequest();
   }
 
   handleSubmit = event => {
@@ -35,7 +42,7 @@ export class App extends Component {
       this.setState({
         input: event.currentTarget.elements.input.value,
       });
-    event.currentTarget.elements.input.value = '';
+    // event.currentTarget.elements.input.value = '';
   };
 
   render() {
@@ -43,6 +50,14 @@ export class App extends Component {
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
         <ImageGallery articles={this.state.articles} />
+        {/* <Button componentDidUpdate={this.componentDidUpdate}
+          articles={this.state.articles} /> */}
+        <button
+          type="button"
+          onClick={this.httpRequest}
+        >
+          Increment by
+        </button>
       </>
     );
   }
