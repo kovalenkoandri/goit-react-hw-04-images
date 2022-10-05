@@ -4,10 +4,10 @@ export const ImageGalleryItem = ({ articles }) => {
   return (
     <>
       {articles.length > 0 &&
-        articles.map(({ id, tags, previewURL }) => (
+        articles.map(({ id, tags, webformatURL }) => (
           <li key={id} className={css.ImageGalleryItem}>
             <img
-              src={previewURL}
+              src={webformatURL}
               alt={tags}
               className={css['ImageGalleryItem-image']}
             />
