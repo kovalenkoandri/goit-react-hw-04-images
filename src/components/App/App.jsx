@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Searchbar } from './Searchbar';
-import { ImageGallery } from './ImageGallery';
-import { Button } from './Button';
+import { Searchbar } from 'components/Searchbar';
+import { ImageGallery } from 'components/ImageGallery';
+import { Button } from 'components/Button';
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 export class App extends Component {
   state = {
