@@ -47,6 +47,7 @@ export class App extends Component {
     this.state.input !== event.currentTarget.elements.input.value &&
       this.setState({
         input: event.currentTarget.elements.input.value,
+        perPage: 3,
       });
     // event.currentTarget.elements.input.value = '';
   };
