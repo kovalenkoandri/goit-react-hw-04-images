@@ -44,22 +44,14 @@ export class App extends Component {
     prevState.input !== this.state.input && // except cycling
       this.httpRequest(); // search btn
   }
-  handleSubmit = event => {
-    event.preventDefault();
-    this.state.input !== event.currentTarget.elements.input.value &&
-      this.setState({
-        input: event.currentTarget.elements.input.value,
-        perPage: 3,
-      });
-    // event.currentTarget.elements.input.value = '';
-  };
+  onSubmit = ({ input, perPage }) => this.setState({ input, perPage });
 
   render() {
     const { articles, isLoading } = this.state;
     return (
       <>
-        <Searchbar handleSubmit={this.handleSubmit} />
-        {isLoading && (
+        <Searchbar onSubmit={this.onSubmit} />
+        {isLoading ? (
           <ThreeDots
             height="80"
             width="80"
@@ -73,8 +65,7 @@ export class App extends Component {
             wrapperClassName=""
             visible={true}
           />
-        )}
-        <ImageGallery articles={articles} />
+        ) : <ImageGallery articles={articles} />}
         {this.state.articles.length > 0 && (
           <Button httpRequest={this.httpRequest} />
         )}
