@@ -7,8 +7,8 @@ export class ImageGallery extends Component {
     articles: [],
   };
   componentDidUpdate(prevProps, prevState) {
-    console.log(`prevProps.articles ${prevProps.articles.length}`);
-    console.log(`this.props.articles ${this.props.articles.length}`);
+    // console.log(`prevProps.articles ${prevProps.articles.length}`);
+    // console.log(`this.props.articles ${this.props.articles.length}`);
     prevProps.articles !== this.props.articles &&
       this.setState({ articles: this.props.articles });
   }

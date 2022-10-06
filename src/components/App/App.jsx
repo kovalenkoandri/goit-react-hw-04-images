@@ -31,24 +31,19 @@ export class App extends Component {
           page: this.state.page,
         },
       });
-      this.setState(prevState => ({
+      this.setState({
         articles: response.data.hits,
-        isLoading: false,
-      }));
+      });
     } catch (error) {
       console.log(error);
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
-  // async componentDidMount() {
-  //   this.setState({ isLoading: true });
-  //   await this.httpRequest();
-  //   this.setState({ isLoading: false });
-  // }
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     prevState.input !== this.state.input && // except cycling
-      (await this.httpRequest()); // search btn
+      this.httpRequest(); // search btn
   }
-  // async componentWillUnmount() {}
   handleSubmit = event => {
     event.preventDefault();
     this.state.input !== event.currentTarget.elements.input.value &&
@@ -65,19 +60,19 @@ export class App extends Component {
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
         {isLoading && (
-            <ThreeDots
-              height="80"
-              width="80"
-              radius="9"
-              color="red"
-              ariaLabel="three-dots-loading"
-              wrapperStyle={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-              wrapperClassName=""
-              visible={true}
-            />
+          <ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="red"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+            wrapperClassName=""
+            visible={true}
+          />
         )}
         <ImageGallery articles={articles} />
         {this.state.articles.length > 0 && (
