@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import css from './Searchbar.module.css';
+ import { ToastContainer, toast } from 'react-toastify';
+
+ import 'react-toastify/dist/ReactToastify.css';
 export class Searchbar extends Component {
   state = {
     input: '',
@@ -7,6 +10,18 @@ export class Searchbar extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
+    if (this.state.input.trim() === '') {
+      toast.error('🦄 At least one symbol required!', {
+        position: 'top-right',
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    };
     this.props.onSubmit(this.state);
   };
   onChange = event => {
@@ -31,6 +46,17 @@ export class Searchbar extends Component {
             onChange={this.onChange}
           />
         </form>
+        <ToastContainer
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </header>
     );
   }

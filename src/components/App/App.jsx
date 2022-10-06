@@ -65,7 +65,9 @@ export class App extends Component {
             wrapperClassName=""
             visible={true}
           />
-        ) : <ImageGallery articles={articles} />}
+        ) : (
+          <ImageGallery articles={articles} />
+        )}
         {this.state.articles.length > 0 && (
           <Button httpRequest={this.httpRequest} />
         )}
