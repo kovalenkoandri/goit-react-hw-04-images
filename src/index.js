@@ -6,7 +6,7 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <App className={css.App} /> // why we need style here */}
+    {/* <App className={css.App} /> */}
     <App />
   </React.StrictMode>
 );

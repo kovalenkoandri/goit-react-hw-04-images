@@ -3,7 +3,10 @@ import axios from 'axios';
 import { Searchbar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
 import { Button } from 'components/Button';
+import { ThreeDots } from 'react-loader-spinner';
+
 axios.defaults.baseURL = 'https://pixabay.com/api/';
+
 export class App extends Component {
   state = {
     articles: [],
@@ -16,7 +19,7 @@ export class App extends Component {
     try {
       this.setState(prevState => ({
         perPage: prevState.perPage + 3,
-        // isLoading: true,
+        isLoading: true,
       }));
       const response = await axios.get(`?q=${this.state.input}`, {
         params: {
@@ -28,14 +31,18 @@ export class App extends Component {
           page: this.state.page,
         },
       });
-      this.setState(prevState => ({ articles: response.data.hits, isLoading: false }));
+      this.setState(prevState => ({
+        articles: response.data.hits,
+        isLoading: false,
+      }));
     } catch (error) {
       console.log(error);
     }
   };
   // async componentDidMount() {
   //   this.setState({ isLoading: true });
-  //   // timeoutId = setTimeout(await this.httpRequest(), 3000);
+  //   await this.httpRequest();
+  //   this.setState({ isLoading: false });
   // }
   async componentDidUpdate(prevProps, prevState) {
     prevState.input !== this.state.input && // except cycling
@@ -56,8 +63,23 @@ export class App extends Component {
     const { articles, isLoading } = this.state;
     return (
       <>
-        <Searchbar handleSubmit={this.handleSubmit} /><></>
-        {isLoading ? <h1>Loading...</h1> : <ImageGallery articles={articles} />}
+        <Searchbar handleSubmit={this.handleSubmit} />
+        {isLoading && (
+            <ThreeDots
+              height="80"
+              width="80"
+              radius="9"
+              color="red"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+              wrapperClassName=""
+              visible={true}
+            />
+        )}
+        <ImageGallery articles={articles} />
         {this.state.articles.length > 0 && (
           <Button httpRequest={this.httpRequest} />
         )}
