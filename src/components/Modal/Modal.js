@@ -25,7 +25,6 @@ export class Modal extends Component {
       <div className={css.Overlay} onClick={this.onOverlay}>
         <div className={css.Modal}>
           {this.props.children}
-          <img src={this.props.largeImageUrl} alt="" />
         </div>
       </div>,
       modalRoot

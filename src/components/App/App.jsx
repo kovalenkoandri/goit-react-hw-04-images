@@ -15,13 +15,13 @@ export class App extends Component {
     page: 1,
     perPage: 3, //12 by hometask
     isLoading: false,
-    largeImageUrl: null,
-    showModal: false,
+    largeImageURL: null,
+    toggleModal: false,
   };
   toggleModal = () =>
-    this.setState(prevState => ({ showModal: !prevState.showModal }));
-  setLargeImageUrl = image => this.setState({ largeImageUrl: image });
-  clearLargeImageUrl = () => this.setState({ largeImageUrl: null });
+    this.setState(prevState => ({ toggleModal: !prevState.toggleModal }));
+  setLargeImageURL = image => this.setState({ largeImageURL: image });
+  clearLargeImageURL = () => this.setState({ largeImageURL: null });
   httpRequest = async () => {
     try {
       this.setState(prevState => ({
@@ -57,21 +57,31 @@ export class App extends Component {
     const { articles, isLoading } = this.state;
     return (
       <>
-        <button type="button" onClick={this.toggleModal}>
-          Open modal
-        </button>
-        {this.state.showModal && (
-          <Modal
-            largeImageUrl={this.state.largeImageUrl}
-            toggleModal={this.toggleModal}
-          ><p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti cum aperiam inventore mollitia autem, non consequuntur, magnam delectus commodi quibusdam atque recusandae repellendus illum eveniet debitis, ea illo numquam mole</p>
+        {this.state.toggleModal && (
+          <Modal toggleModal={this.toggleModal}>
+            <img src={this.state.largeImageURL} alt="" />
+            <p>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti
+              cum aperiam inventore mollitia autem, non consequuntur, magnam
+              delectus commodi quibusdam atque recusandae repellendus illum
+              eveniet debitis, ea illo numquam mole
+            </p>
             <button type="button" onClick={this.toggleModal}>
               Close modal
             </button>
           </Modal>
         )}
         <Searchbar onSubmit={this.onSubmit} />
-        {isLoading ? <Loader /> : <ImageGallery articles={articles} />}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <ImageGallery
+            articles={articles}
+            toggleModal={this.toggleModal}
+            setLargeImageURL={this.setLargeImageURL}
+            clearLargeImageURL={this.clearLargeImageURL}
+          />
+        )}
         {this.state.articles.length > 0 && (
           <Button httpRequest={this.httpRequest} />
         )}
