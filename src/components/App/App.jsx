@@ -60,15 +60,6 @@ export class App extends Component {
         {this.state.toggleModal && (
           <Modal toggleModal={this.toggleModal}>
             <img src={this.state.largeImageURL} alt="" />
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti
-              cum aperiam inventore mollitia autem, non consequuntur, magnam
-              delectus commodi quibusdam atque recusandae repellendus illum
-              eveniet debitis, ea illo numquam mole
-            </p>
-            <button type="button" onClick={this.toggleModal}>
-              Close modal
-            </button>
           </Modal>
         )}
         <Searchbar onSubmit={this.onSubmit} />
