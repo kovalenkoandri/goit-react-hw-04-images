@@ -4,6 +4,7 @@ import { Searchbar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
 import { Button } from 'components/Button';
 import { Loader } from 'components/Loader';
+import { Modal } from 'components/Modal';
 
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 
@@ -14,7 +15,13 @@ export class App extends Component {
     page: 1,
     perPage: 3, //12 by hometask
     isLoading: false,
+    largeImageUrl: null,
+    showModal: false,
   };
+  toggleModal = () =>
+    this.setState(prevState => ({ showModal: !prevState.showModal }));
+  setLargeImageUrl = image => this.setState({ largeImageUrl: image });
+  clearLargeImageUrl = () => this.setState({ largeImageUrl: null });
   httpRequest = async () => {
     try {
       this.setState(prevState => ({
@@ -50,6 +57,19 @@ export class App extends Component {
     const { articles, isLoading } = this.state;
     return (
       <>
+        <button type="button" onClick={this.toggleModal}>
+          Open modal
+        </button>
+        {this.state.showModal && (
+          <Modal
+            largeImageUrl={this.state.largeImageUrl}
+            toggleModal={this.toggleModal}
+          ><p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti cum aperiam inventore mollitia autem, non consequuntur, magnam delectus commodi quibusdam atque recusandae repellendus illum eveniet debitis, ea illo numquam mole</p>
+            <button type="button" onClick={this.toggleModal}>
+              Close modal
+            </button>
+          </Modal>
+        )}
         <Searchbar onSubmit={this.onSubmit} />
         {isLoading ? <Loader /> : <ImageGallery articles={articles} />}
         {this.state.articles.length > 0 && (
