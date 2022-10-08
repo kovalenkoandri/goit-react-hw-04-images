@@ -3,18 +3,15 @@ import React from 'react';
 import { ImageGalleryItem } from 'components/ImageGalleryItem';
 import css from './ImageGallery.module.css';
 
-export const ImageGallery = ({
-  articles,
-  toggleModal,
-  setLargeImageURL,
-}) => (
+export const ImageGallery = ({ articles, toggleModal, setLargeImageURL, setTags }) => (
   <>
     <ul className={css.ImageGallery}>
       <ImageGalleryItem
         {...{
-          articles: articles,
-          toggleModal: toggleModal,
-          setLargeImageURL: setLargeImageURL,
+          articles,
+          toggleModal,
+          setLargeImageURL,
+          setTags,
         }}
       />
     </ul>

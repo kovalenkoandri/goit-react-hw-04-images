@@ -2,9 +2,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import cssItem from './ImageGalleryItem.module.css';
 export class ImageGalleryItem extends Component {
-  onGalleryItem = (event, largeImageURL) => {
-    event.target && this.props.setLargeImageURL(largeImageURL);
-    this.props.toggleModal();
+  onGalleryItem = (event, largeImageURL, tags) => {
+    if (event.target) {
+      this.props.setLargeImageURL(largeImageURL);
+      this.props.setTags(tags);
+      this.props.toggleModal();
+    }
   };
   render() {
     const { articles } = this.props;
@@ -16,7 +19,9 @@ export class ImageGalleryItem extends Component {
               <li
                 key={id.toString()}
                 className={cssItem.ImageGalleryItem}
-                onClick={event => this.onGalleryItem(event, largeImageURL)}
+                onClick={event =>
+                  this.onGalleryItem(event, largeImageURL, tags)
+                }
               >
                 <img
                   src={webformatURL}

@@ -18,6 +18,7 @@ export class App extends Component {
     isLoading: false,
     largeImageURL: null,
     toggleModal: false,
+    tags: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,7 +30,10 @@ export class App extends Component {
       this.httpRequest();
     }
     if (prevState.toggleModal !== this.state.toggleModal) {
-      !this.state.toggleModal && this.clearLargeImageURL();
+      // except cycling
+      //if modal closed
+      !this.state.toggleModal && this.clearLargeImageURL(); // clearLargeImageURL
+      !this.state.toggleModal && this.clearTags(); // clearTags
     }
   }
 
@@ -39,6 +43,10 @@ export class App extends Component {
   setLargeImageURL = image => this.setState({ largeImageURL: image });
 
   clearLargeImageURL = () => this.setState({ largeImageURL: null });
+
+  setTags = tags => this.setState({ tags });
+
+  clearTags = () => this.setState({ tags: null });
 
   loadMorePage = () =>
     this.setState(prevState => ({
@@ -78,7 +86,7 @@ export class App extends Component {
       <>
         {this.state.toggleModal && (
           <Modal toggleModal={this.toggleModal}>
-            <img src={this.state.largeImageURL} alt="" />
+            <img src={this.state.largeImageURL} alt={this.state.tags} />
           </Modal>
         )}
         <Searchbar onSubmit={this.onSubmit} />
@@ -90,6 +98,7 @@ export class App extends Component {
               articles: articles,
               toggleModal: this.toggleModal,
               setLargeImageURL: this.setLargeImageURL,
+              setTags: this.setTags,
             }}
           />
         )}
