@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Searchbar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
 import { Button } from 'components/Button';
 import { Loader } from 'components/Loader';
 import { Modal } from 'components/Modal';
-
-axios.defaults.baseURL = 'https://pixabay.com/api/';
+import { httpRequest } from 'components/services/api';
 
 export class App extends Component {
   state = {
@@ -21,13 +19,47 @@ export class App extends Component {
     tags: null,
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    prevState.perPage !== this.state.perPage && // except cycling
-      this.httpRequest(); // loadMore btn
+  async componentDidUpdate(prevProps, prevState) {
+    // except cycling
+    if (prevState.perPage !== this.state.perPage) {
+      this.setState({
+        isLoading: true,
+      });
+      try {
+        const response = await httpRequest(
+          this.state.input,
+          this.state.perPage,
+          this.state.page
+        ); // loadMore btn
+        this.setState({
+          articles: response.data.hits,
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.setState({ isLoading: false });
+      }
+    }
     if (prevState.input !== this.state.input) {
       // except cycling
-      this.setState({ perPage: 3 }); // search btn
-      this.httpRequest();
+      this.setState({
+        isLoading: true,
+        perPage: 3,
+      });
+      try {
+        const response = await httpRequest(
+          this.state.input,
+          this.state.perPage,
+          this.state.page
+        ); // search btn
+        this.setState({
+          articles: response.data.hits,
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.setState({ isLoading: false });
+      }
     }
     if (prevState.toggleModal !== this.state.toggleModal) {
       // except cycling
@@ -52,31 +84,6 @@ export class App extends Component {
     this.setState(prevState => ({
       perPage: prevState.perPage + prevState.loadMorePage,
     }));
-
-  httpRequest = async () => {
-    try {
-      this.setState({
-        isLoading: true,
-      });
-      const response = await axios.get(`?q=${this.state.input}`, {
-        params: {
-          key: '29101880-694af7e9974b3c9bb9fbf3052',
-          image_typemit: 'photo',
-          orientation: 'horizontal',
-          safesearch: true,
-          per_page: this.state.perPage,
-          page: this.state.page,
-        },
-      });
-      this.setState({
-        articles: response.data.hits,
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  };
 
   onSubmit = input => this.setState({ input });
 
