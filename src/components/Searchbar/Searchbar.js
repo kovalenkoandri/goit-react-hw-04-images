@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import css from './Searchbar.module.css';
- import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
- import 'react-toastify/dist/ReactToastify.css';
 export class Searchbar extends Component {
   state = {
     input: '',
-    perPage: 3,
   };
+
   handleSubmit = event => {
     event.preventDefault();
     if (this.state.input.trim() === '') {
@@ -21,12 +21,14 @@ export class Searchbar extends Component {
         progress: undefined,
       });
       return;
-    };
-    this.props.onSubmit(this.state);
+    }
+    this.props.onSubmit(this.state.input);
   };
+
   onChange = event => {
-    this.setState({input: event.currentTarget.value})
-  }
+    this.setState({ input: event.currentTarget.value });
+  };
+
   render() {
     return (
       <header className={css.Searchbar}>

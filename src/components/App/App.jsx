@@ -19,14 +19,29 @@ export class App extends Component {
     largeImageURL: null,
     toggleModal: false,
   };
+  
+  componentDidUpdate(prevProps, prevState) {
+    prevState.perPage !== this.state.perPage && // except cycling
+      this.httpRequest(); // loadMore btn
+    if (prevState.input !== this.state.input) {
+      // except cycling
+      this.setState({ perPage: 3 }); // search btn
+      this.httpRequest();
+    }
+  }
+  
   toggleModal = () =>
     this.setState(prevState => ({ toggleModal: !prevState.toggleModal }));
+  
   setLargeImageURL = image => this.setState({ largeImageURL: image });
+  
   clearLargeImageURL = () => this.setState({ largeImageURL: null });
+  
   loadMorePage = () =>
     this.setState(prevState => ({
       perPage: prevState.perPage + prevState.loadMorePage,
     }));
+  
   httpRequest = async () => {
     try {
       this.setState({
@@ -51,12 +66,8 @@ export class App extends Component {
       this.setState({ isLoading: false });
     }
   };
-  componentDidUpdate(prevProps, prevState) {
-      prevState.perPage !== this.state.perPage && // except cycling
-      this.httpRequest(); // search btn
-    prevState.input !== this.state.input && this.httpRequest();
-  }
-  onSubmit = ({ input, perPage }) => this.setState({ input, perPage });
+
+  onSubmit = input => this.setState({ input });
 
   render() {
     const { articles, isLoading } = this.state;
