@@ -28,6 +28,9 @@ export class App extends Component {
       this.setState({ perPage: 3 }); // search btn
       this.httpRequest();
     }
+    if (prevState.toggleModal !== this.state.toggleModal) {
+      !this.state.toggleModal && this.clearLargeImageURL();
+    }
   }
 
   toggleModal = () =>
@@ -83,10 +86,11 @@ export class App extends Component {
           <Loader />
         ) : (
           <ImageGallery
-            articles={articles}
-            toggleModal={this.toggleModal}
-            setLargeImageURL={this.setLargeImageURL}
-            clearLargeImageURL={this.clearLargeImageURL}
+            {...{
+              articles: articles,
+              toggleModal: this.toggleModal,
+              setLargeImageURL: this.setLargeImageURL,
+            }}
           />
         )}
         {this.state.articles.length > 0 && (
