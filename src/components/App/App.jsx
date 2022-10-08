@@ -14,6 +14,7 @@ export class App extends Component {
     input: '',
     page: 1,
     perPage: 3, //12 by hometask
+    loadMorePage: 3,
     isLoading: false,
     largeImageURL: null,
     toggleModal: false,
@@ -22,12 +23,15 @@ export class App extends Component {
     this.setState(prevState => ({ toggleModal: !prevState.toggleModal }));
   setLargeImageURL = image => this.setState({ largeImageURL: image });
   clearLargeImageURL = () => this.setState({ largeImageURL: null });
+  loadMorePage = () =>
+    this.setState(prevState => ({
+      perPage: prevState.perPage + prevState.loadMorePage,
+    }));
   httpRequest = async () => {
     try {
-      this.setState(prevState => ({
-        perPage: prevState.perPage + 3,
+      this.setState({
         isLoading: true,
-      }));
+      });
       const response = await axios.get(`?q=${this.state.input}`, {
         params: {
           key: '29101880-694af7e9974b3c9bb9fbf3052',
@@ -48,8 +52,9 @@ export class App extends Component {
     }
   };
   componentDidUpdate(prevProps, prevState) {
-    prevState.input !== this.state.input && // except cycling
+      prevState.perPage !== this.state.perPage && // except cycling
       this.httpRequest(); // search btn
+    prevState.input !== this.state.input && this.httpRequest();
   }
   onSubmit = ({ input, perPage }) => this.setState({ input, perPage });
 
@@ -74,7 +79,7 @@ export class App extends Component {
           />
         )}
         {this.state.articles.length > 0 && (
-          <Button httpRequest={this.httpRequest} />
+          <Button loadMorePage={this.loadMorePage} />
         )}
       </>
     );

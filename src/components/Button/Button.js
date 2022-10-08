@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import css from './Button.module.css';
 
-export const Button = ({ httpRequest }) => {
+export const Button = ({ loadMorePage }) => {
   return (
-    <button className={css.Button} type="button" onClick={httpRequest}>
+    <button className={css.Button} type="button" onClick={loadMorePage}>
       Load more
     </button>
   );
 };
 Button.propTypes = {
-  httpRequest: PropTypes.func.isRequired,
+  loadMorePage: PropTypes.func.isRequired,
 };
