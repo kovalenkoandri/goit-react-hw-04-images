@@ -32,6 +32,7 @@ export class Modal extends Component {
     );
   }
 }
-modalRoot.propTypes = {
+Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
