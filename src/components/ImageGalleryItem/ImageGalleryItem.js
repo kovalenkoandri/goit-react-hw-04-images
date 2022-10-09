@@ -10,41 +10,27 @@ export class ImageGalleryItem extends Component {
     }
   };
   render() {
-    const { articles } = this.props;
     return (
       <>
-        {articles.length > 0 &&
-          articles.map(({ id, tags, webformatURL, largeImageURL }) => {
-            return (
-              <li
-                key={id.toString()}
-                className={cssItem.ImageGalleryItem}
-                onClick={event =>
-                  this.onGalleryItem(event, largeImageURL, tags)
-                }
-              >
-                <img
-                  src={webformatURL}
-                  alt={tags}
-                  className={cssItem['ImageGalleryItem-image']}
-                />
-              </li>
-            );
-          })}
+        <li
+          className={cssItem.ImageGalleryItem}
+          onClick={event => this.onGalleryItem(event, this.props.largeImageURL, this.props.alt)}
+        >
+          <img
+            src={this.props.src}
+            alt={this.props.alt}
+            className={cssItem['ImageGalleryItem-image']}
+          />
+        </li>
       </>
     );
   }
 }
 ImageGalleryItem.propTypes = {
-  articles: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        tags: PropTypes.string.isRequired,
-        webformatURL: PropTypes.string.isRequired,
-        largeImageURL: PropTypes.string.isRequired,
-      })
-  ).isRequired,
-  toggleModal: PropTypes.func.isRequired,
   setLargeImageURL: PropTypes.func.isRequired,
   setTags: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
 };
