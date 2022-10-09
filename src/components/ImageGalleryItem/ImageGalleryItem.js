@@ -36,7 +36,15 @@ export class ImageGalleryItem extends Component {
   }
 }
 ImageGalleryItem.propTypes = {
-  articles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  articles: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        tags: PropTypes.string.isRequired,
+        webformatURL: PropTypes.string.isRequired,
+        largeImageURL: PropTypes.string.isRequired,
+      })
+  ).isRequired,
   toggleModal: PropTypes.func.isRequired,
   setLargeImageURL: PropTypes.func.isRequired,
+  setTags: PropTypes.func.isRequired,
 };
