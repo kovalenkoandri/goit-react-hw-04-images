@@ -11,8 +11,6 @@ export class App extends Component {
     articles: [],
     input: '',
     page: 1,
-    perPage: 12, //12 by hometask
-    loadMorePage: 12,
     isLoading: false,
     largeImageURL: null,
     toggleModal: false,
@@ -22,21 +20,23 @@ export class App extends Component {
   async componentDidUpdate(prevProps, prevState) {
     // except cycling
     if (
-      prevState.perPage !== this.state.perPage ||
+      prevState.page !== this.state.page ||
       prevState.input !== this.state.input
     ) {
       this.setState({
         isLoading: true,
       });
       try {
-        const response = await httpRequest(
-          this.state.input,
-          this.state.perPage,
-          this.state.page
-        ); // loadMore btn
-        this.setState({
-          articles: response.data.hits,
-        });
+        const response = await httpRequest(this.state.input, this.state.page); // loadMore btn
+        if (this.state.page > 1) {
+          this.setState({
+            articles: [...this.state.articles, ...response.data.hits],
+          });
+        } else {
+          this.setState({
+            articles: response.data.hits,
+          });
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -64,10 +64,10 @@ export class App extends Component {
 
   loadMorePage = () =>
     this.setState(prevState => ({
-      perPage: prevState.perPage + prevState.loadMorePage,
+      page: prevState.page + 1,
     }));
 
-  onSubmit = input => this.setState({ input, perPage: this.state.loadMorePage });
+  onSubmit = input => this.setState({ input, page: 1 });
 
   render() {
     const { articles, isLoading } = this.state;
