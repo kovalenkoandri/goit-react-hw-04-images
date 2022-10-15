@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Searchbar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
-import { Button } from 'components/Button';
+// import { Button } from 'components/Button';
 import { Loader } from 'components/Loader';
 import { Modal } from 'components/Modal';
 import { httpRequest } from 'components/services/api';
@@ -14,17 +14,26 @@ export const App = () => {
   const [largeImageURL, setLargeImageURL] = useState(null);
   const [toggleModal, setToggleModal] = useState(false);
   const [tags, setTags] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
   useEffect(() => {
     if (!input) return;
-    
+
     const getHttp = async (input, page) => {
       setIsLoading(true);
       try {
-        const response = await httpRequest(input, page).then(responseHttp => responseHttp.data.hits);
+        const response = await httpRequest(input, page).then(responseHttp => {
+          if (responseHttp.data.hits.length === 0) {
+            setHasMore(false);
+            return [];
+          } else {
+            setHasMore(true);
+            return responseHttp.data.hits;
+          }
+        });
         if (page > 1) {
           setArticles(prevArticles => [...prevArticles, ...response]);
         } else {
-          setArticles( [...response]);
+          setArticles([...response]);
         }
       } catch (error) {
         console.error(error);
@@ -49,6 +58,7 @@ export const App = () => {
   const handleClearTags = () => setTags(null);
 
   const handleLoadMorePage = () => setPage(page + 1);
+    
 
   const handleSubmit = input => {
     setInput(input);
@@ -72,10 +82,12 @@ export const App = () => {
             toggleModal: handleToggleModal,
             setLargeImageURL: handleLargeImageURL,
             setTags: handleSetTags,
+            handleLoadMorePage,
+            hasMore,
           }}
         />
       )}
-      {articles.length > 0 && <Button loadMorePage={handleLoadMorePage} />}
+      {/* {articles.length > 0 && <Button loadMorePage={handleLoadMorePage} />} */}
     </>
   );
 };
