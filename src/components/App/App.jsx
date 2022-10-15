@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { Searchbar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
 import { Button } from 'components/Button';
@@ -6,95 +6,76 @@ import { Loader } from 'components/Loader';
 import { Modal } from 'components/Modal';
 import { httpRequest } from 'components/services/api';
 
-export class App extends Component {
-  state = {
-    articles: [],
-    input: '',
-    page: 1,
-    isLoading: false,
-    largeImageURL: null,
-    toggleModal: false,
-    tags: null,
-  };
-
-  async componentDidUpdate(prevProps, prevState) {
-    // except cycling
-    if (
-      prevState.page !== this.state.page ||
-      prevState.input !== this.state.input
-    ) {
-      this.setState({
-        isLoading: true,
-      });
+export const App = () => {
+  const [articles, setArticles] = useState([]);
+  const [input, setInput] = useState('');
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [largeImageURL, setLargeImageURL] = useState(null);
+  const [toggleModal, setToggleModal] = useState(false);
+  const [tags, setTags] = useState(null);
+  useEffect(() => {
+    if (!input) return;
+    
+    const getHttp = async (input, page) => {
+      setIsLoading(true);
       try {
-        const response = await httpRequest(this.state.input, this.state.page); // loadMore btn
-        if (this.state.page > 1) {
-          this.setState({
-            articles: [...this.state.articles, ...response.data.hits],
-          });
+        const response = await httpRequest(input, page).then(responseHttp => responseHttp.data.hits);
+        if (page > 1) {
+          setArticles(prevArticles => [...prevArticles, ...response]);
         } else {
-          this.setState({
-            articles: response.data.hits,
-          });
+          setArticles( [...response]);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
-        this.setState({ isLoading: false });
+        setIsLoading(false);
       }
-    }
-    if (prevState.toggleModal !== this.state.toggleModal) {
-      // except cycling
-      //if modal closed
-      !this.state.toggleModal && this.clearLargeImageURL(); // clearLargeImageURL
-      !this.state.toggleModal && this.clearTags(); // clearTags
-    }
-  }
+    };
+    getHttp(input, page);
+  }, [input, page]);
+  useEffect(() => {
+    !toggleModal && handleClearLargeImageURL(); // clearLargeImageURL
+    !toggleModal && handleClearTags(); // clearTags
+  }, [toggleModal]);
+  const handleToggleModal = () => setToggleModal(!toggleModal);
 
-  toggleModal = () =>
-    this.setState(prevState => ({ toggleModal: !prevState.toggleModal }));
+  const handleLargeImageURL = image => setLargeImageURL(image);
 
-  setLargeImageURL = image => this.setState({ largeImageURL: image });
+  const handleClearLargeImageURL = () => setLargeImageURL(null);
 
-  clearLargeImageURL = () => this.setState({ largeImageURL: null });
+  const handleSetTags = tags => setTags(tags);
 
-  setTags = tags => this.setState({ tags });
+  const handleClearTags = () => setTags(null);
 
-  clearTags = () => this.setState({ tags: null });
+  const handleLoadMorePage = () => setPage(page + 1);
 
-  loadMorePage = () =>
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
+  const handleSubmit = input => {
+    setInput(input);
+    setPage(1);
+  };
 
-  onSubmit = input => this.setState({ input, page: 1 });
-
-  render() {
-    const { articles, isLoading } = this.state;
-    return (
-      <>
-        {this.state.toggleModal && (
-          <Modal toggleModal={this.toggleModal}>
-            <img src={this.state.largeImageURL} alt={this.state.tags} />
-          </Modal>
-        )}
-        <Searchbar onSubmit={this.onSubmit} />
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <ImageGallery
-            {...{
-              articles: articles,
-              toggleModal: this.toggleModal,
-              setLargeImageURL: this.setLargeImageURL,
-              setTags: this.setTags,
-            }}
-          />
-        )}
-        {this.state.articles.length > 0 && (
-          <Button loadMorePage={this.loadMorePage} />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {toggleModal && (
+        <Modal toggleModal={handleToggleModal}>
+          <img src={largeImageURL} alt={tags} />
+        </Modal>
+      )}
+      <Searchbar onSubmit={handleSubmit} />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <ImageGallery
+          {...{
+            articles: articles,
+            toggleModal: handleToggleModal,
+            setLargeImageURL: handleLargeImageURL,
+            setTags: handleSetTags,
+          }}
+        />
+      )}
+      {articles.length > 0 && <Button loadMorePage={handleLoadMorePage} />}
+    </>
+  );
+};
