@@ -1,36 +1,35 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import { ImageGalleryItem } from 'components/ImageGalleryItem';
 import css from './ImageGallery.module.css';
 
-export class ImageGallery extends Component {
-  
-  render() {
-    const { articles } = this.props;
-    return (
-      <>
-        <ul className={css.ImageGallery}>
-          {articles.length > 0 &&
-            articles.map(({ id, tags, webformatURL, largeImageURL }) => {
-              return (
-                <ImageGalleryItem
-                  key={id.toString()}
-                  setLargeImageURL={this.props.setLargeImageURL}
-                  setTags={this.props.setTags}
-                  toggleModal={this.props.toggleModal}
-                  largeImageURL={largeImageURL}
-                  src={webformatURL}
-                  alt={tags}
-                >
-                  {this.props.children}
-                </ImageGalleryItem>
-              );
-            })}
-        </ul>
-      </>
-    );
-  }
-}
+export const ImageGallery = ({
+  articles,
+  setLargeImageURL,
+  setTags,
+  toggleModal,
+  children,
+}) => (
+  <>
+    <ul className={css.ImageGallery}>
+      {articles.length > 0 &&
+        articles.map(({ id, tags, webformatURL, largeImageURL }) => {
+          return (
+            <ImageGalleryItem
+              key={id.toString()}
+              setLargeImageURL={setLargeImageURL}
+              setTags={setTags}
+              toggleModal={toggleModal}
+              largeImageURL={largeImageURL}
+              src={webformatURL}
+              alt={tags}
+            >
+              {children}
+            </ImageGalleryItem>
+          );
+        })}
+    </ul>
+  </>
+);
 
 ImageGallery.propTypes = {
   articles: PropTypes.arrayOf(
