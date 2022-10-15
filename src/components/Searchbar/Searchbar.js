@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import css from './Searchbar.module.css';
 import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export class Searchbar extends Component {
-  state = {
-    input: '',
-  };
+export const Searchbar = ({ onSubmit }) => {
+  const [input, setInput] = useState('');
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    if (this.state.input.trim() === '') {
+    if (input.trim() === '') {
       toast.error('🦄 At least one symbol required!', {
         position: 'top-right',
         autoClose: 1000,
@@ -23,47 +21,45 @@ export class Searchbar extends Component {
       });
       return;
     }
-    this.props.onSubmit(this.state.input);
+    onSubmit(input);
   };
 
-  onChange = event => {
-    this.setState({ input: event.currentTarget.value });
+  const onChange = event => {
+    setInput(event.target.value);
   };
 
-  render() {
-    return (
-      <header className={css.Searchbar}>
-        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
-          <button type="submit" className={css['SearchForm-button']}>
-            <span>Search</span>
-          </button>
+  return (
+    <header className={css.Searchbar}>
+      <form className={css.SearchForm} onSubmit={handleSubmit}>
+        <button type="submit" className={css['SearchForm-button']}>
+          <span>Search</span>
+        </button>
 
-          <input
-            name="input"
-            className={css['SearchForm-input']}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={this.state.input}
-            onChange={this.onChange}
-          />
-        </form>
-        <ToastContainer
-          position="top-right"
-          autoClose={1000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
+        <input
+          name="input"
+          className={css['SearchForm-input']}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          value={input}
+          onChange={onChange}
         />
-      </header>
-    );
-  }
-}
+      </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </header>
+  );
+};
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
