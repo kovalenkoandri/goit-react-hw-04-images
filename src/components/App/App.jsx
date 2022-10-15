@@ -74,9 +74,11 @@ console.log(input);
           <img src={largeImageURL} alt={tags} />
         </Modal>
       )}
-      <Searchbar onSubmit={handleSubmit} />
+      <Searchbar
+        {...{ input, setInput, onSubmit: handleSubmit }}
+      />
       {isLoading && <Loader />}
-      { (input.length !== 0) && (
+      {input.length !== 0 && (
         <InfiniteScroll
           dataLength={articles.length} //This is important field to render the next data
           next={handleLoadMorePage}
