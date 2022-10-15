@@ -1,37 +1,36 @@
-import React, { Component } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import css from './Modal.module.css';
 import PropTypes from 'prop-types';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.onEsc);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onEsc);
-  }
-  onEsc = event => {
-    if (event.code === 'Escape') {
-      this.props.toggleModal();
-    }
-  };
-  onOverlay = event => {
+export const Modal = ({ toggleModal, children }) => {
+  useEffect(() => {
+    const onEsc = event => {
+      if (event.code === 'Escape') {
+        toggleModal();
+      }
+    };
+    window.addEventListener('keydown', onEsc);
+    return () => {
+      window.removeEventListener('keydown', onEsc);
+    };
+  }, [toggleModal]);
+
+  const onOverlay = event => {
     if (event.currentTarget === event.target) {
-      this.props.toggleModal();
+      toggleModal();
     }
   };
-  render() {
-    // createPortal resque from 1. overflow: hidden ancestor components may couse cutted view; 2. modal window require z-index: 1
-    return createPortal(
-      <div className={css.Overlay} onClick={this.onOverlay}>
-        <div className={css.Modal}>{this.props.children}</div>
-      </div>,
-      modalRoot
-    );
-  }
-}
+  // createPortal resque from 1. overflow: hidden ancestor components may couse cutted view; 2. modal window require z-index: 1
+  return createPortal(
+    <div className={css.Overlay} onClick={onOverlay}>
+      <div className={css.Modal}>{children}</div>
+    </div>,
+    modalRoot
+  );
+};
 Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
