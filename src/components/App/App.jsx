@@ -5,6 +5,8 @@ import { ImageGallery } from 'components/ImageGallery';
 import { Loader } from 'components/Loader';
 import { Modal } from 'components/Modal';
 import { httpRequest } from 'components/services/api';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 export const App = () => {
   const [articles, setArticles] = useState([]);
@@ -17,7 +19,7 @@ export const App = () => {
   const [hasMore, setHasMore] = useState(true);
   useEffect(() => {
     if (!input) return;
-
+console.log(input);
     const getHttp = async (input, page) => {
       setIsLoading(true);
       try {
@@ -73,19 +75,29 @@ export const App = () => {
         </Modal>
       )}
       <Searchbar onSubmit={handleSubmit} />
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <ImageGallery
-          {...{
-            articles: articles,
-            toggleModal: handleToggleModal,
-            setLargeImageURL: handleLargeImageURL,
-            setTags: handleSetTags,
-            handleLoadMorePage,
-            hasMore,
-          }}
-        />
+      {isLoading && <Loader />}
+      { (input.length !== 0) && (
+        <InfiniteScroll
+          dataLength={articles.length} //This is important field to render the next data
+          next={handleLoadMorePage}
+          hasMore={hasMore}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          <ImageGallery
+            {...{
+              articles: articles,
+              toggleModal: handleToggleModal,
+              setLargeImageURL: handleLargeImageURL,
+              setTags: handleSetTags,
+              handleLoadMorePage,
+              hasMore,
+            }}
+          />
+        </InfiniteScroll>
       )}
       {/* {articles.length > 0 && <Button loadMorePage={handleLoadMorePage} />} */}
     </>
