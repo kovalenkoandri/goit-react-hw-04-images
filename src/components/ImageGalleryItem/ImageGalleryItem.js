@@ -1,31 +1,37 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import cssItem from './ImageGalleryItem.module.css';
-export class ImageGalleryItem extends Component {
-  onGalleryItem = (event, largeImageURL, tags) => {
+export const ImageGalleryItem = ({
+  setLargeImageURL,
+  setTags,
+  toggleModal,
+  largeImageURL,
+  src,
+  alt,
+}) => {
+  const onGalleryItem = (event, largeImageURL, tags) => {
     if (event.target) {
-      this.props.setLargeImageURL(largeImageURL);
-      this.props.setTags(tags);
-      this.props.toggleModal();
+      setLargeImageURL(largeImageURL);
+      setTags(tags);
+      toggleModal();
     }
   };
-  render() {
-    return (
-      <>
-        <li
-          className={cssItem.ImageGalleryItem}
-          onClick={event => this.onGalleryItem(event, this.props.largeImageURL, this.props.alt)}
-        >
-          <img
-            src={this.props.src}
-            alt={this.props.alt}
-            className={cssItem['ImageGalleryItem-image']}
-          />
-        </li>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <li
+        className={cssItem.ImageGalleryItem}
+        onClick={event =>
+          onGalleryItem(event, largeImageURL, alt)
+        }
+      >
+        <img
+          src={src}
+          alt={alt}
+          className={cssItem['ImageGalleryItem-image']}
+        />
+      </li>
+    </>
+  );
+};
 ImageGalleryItem.propTypes = {
   setLargeImageURL: PropTypes.func.isRequired,
   setTags: PropTypes.func.isRequired,
