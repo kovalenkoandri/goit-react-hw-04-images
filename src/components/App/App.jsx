@@ -16,19 +16,24 @@ export const App = () => {
   const [tags, setTags] = useState(null);
   useEffect(() => {
     if (!input) return;
-    
+
     const getHttp = async (input, page) => {
       setIsLoading(true);
       try {
-        const response = await httpRequest(input, page).then(responseHttp => responseHttp.data.hits);
+        const response = await httpRequest(input, page).then(
+          responseHttp => responseHttp.data.hits
+        );
         if (page > 1) {
           setArticles(prevArticles => [...prevArticles, ...response]);
         } else {
-          setArticles( [...response]);
+          setArticles([...response]);
         }
       } catch (error) {
         console.error(error);
       } finally {
+        setArticles(prevArticles =>
+          prevArticles.filter((el, idx) => prevArticles.indexOf(el) === idx)
+        );
         setIsLoading(false);
       }
     };
