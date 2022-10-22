@@ -3,7 +3,7 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem';
 import css from './ImageGallery.module.css';
 
 export const ImageGallery = ({
-  articles,
+  images,
   setLargeImageURL,
   setTags,
   toggleModal,
@@ -11,8 +11,8 @@ export const ImageGallery = ({
 }) => (
   <>
     <ul className={css.ImageGallery}>
-      {articles.length > 0 &&
-        articles.map(({ id, tags, webformatURL, largeImageURL }) => {
+      {images.length > 0 &&
+        images.map(({ id, tags, webformatURL, largeImageURL }) => {
           return (
             <ImageGalleryItem
               key={id.toString()}
@@ -32,7 +32,7 @@ export const ImageGallery = ({
 );
 
 ImageGallery.propTypes = {
-  articles: PropTypes.arrayOf(
+  images: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       tags: PropTypes.string.isRequired,

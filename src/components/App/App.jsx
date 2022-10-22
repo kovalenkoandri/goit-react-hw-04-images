@@ -7,7 +7,7 @@ import { Modal } from 'components/Modal';
 import { httpRequest } from 'components/services/api';
 
 export const App = () => {
-  const [articles, setArticles] = useState([]);
+  const [images, setImages] = useState([]);
   const [input, setInput] = useState('');
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,9 +22,9 @@ export const App = () => {
       try {
         const response = await httpRequest(input, page).then(responseHttp => responseHttp.data.hits);
         if (page > 1) {
-          setArticles(prevArticles => [...prevArticles, ...response]);
+          setImages(prevImages => [...prevImages, ...response]);
         } else {
-          setArticles( [...response]);
+          setImages( [...response]);
         }
       } catch (error) {
         console.error(error);
@@ -68,14 +68,14 @@ export const App = () => {
       ) : (
         <ImageGallery
           {...{
-            articles: articles,
+            images: images,
             toggleModal: handleToggleModal,
             setLargeImageURL: handleLargeImageURL,
             setTags: handleSetTags,
           }}
         />
       )}
-      {articles.length > 0 && <Button loadMorePage={handleLoadMorePage} />}
+      {images.length > 0 && <Button loadMorePage={handleLoadMorePage} />}
     </>
   );
 };
